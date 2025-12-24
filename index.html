@@ -9,6 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
+        darkMode: "class",
         theme: {
           extend: {
             fontFamily: {
@@ -31,10 +32,108 @@
     </script>
 
     <style>
+      html {
+        scroll-padding-top: 5.5rem;
+      }
+
+      section[id] {
+        scroll-margin-top: 5.5rem;
+      }
+
+      :root {
+        --bg1: 248 250 252;
+        --bg2: 241 245 249;
+        --card: 255 255 255;
+        --text: 15 23 42;
+        --muted: 71 85 105;
+        --ring: 226 232 240;
+      }
+
+      html.dark {
+        --bg1: 2 6 23;
+        --bg2: 15 23 42;
+        --card: 2 6 23;
+        --text: 226 232 240;
+        --muted: 148 163 184;
+        --ring: 30 41 59;
+      }
+
+      body {
+        background:
+          radial-gradient(1200px 700px at 20% 10%, rgba(56, 189, 248, 0.18), transparent 60%),
+          radial-gradient(900px 600px at 90% 25%, rgba(99, 102, 241, 0.18), transparent 60%),
+          radial-gradient(800px 600px at 40% 95%, rgba(34, 197, 94, 0.14), transparent 55%),
+          linear-gradient(180deg, rgb(var(--bg1)), rgb(var(--bg2)));
+        color: rgb(var(--text));
+      }
+
+      .glass {
+        background: rgba(var(--card), 0.72);
+        border: 1px solid rgba(var(--ring), 0.9);
+        box-shadow: 0 1px 1px rgba(2, 6, 23, 0.06), 0 16px 50px rgba(2, 6, 23, 0.08);
+        backdrop-filter: blur(12px);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(12px);
+        transition: opacity 500ms ease, transform 500ms ease;
+      }
+
+      .reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .print-only {
+        display: none;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .reveal {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+      }
+
       @media print {
+        @page {
+          size: A4;
+          margin: 12mm;
+        }
+
         .no-print {
           display: none !important;
         }
+
+        .print-only {
+          display: block !important;
+        }
+
+        body {
+          background: #ffffff !important;
+          color: #0f172a !important;
+        }
+
+        .glass {
+          background: #ffffff !important;
+          border: 1px solid #e2e8f0 !important;
+          box-shadow: none !important;
+          backdrop-filter: none !important;
+        }
+
+        .reveal {
+          opacity: 1 !important;
+          transform: none !important;
+          transition: none !important;
+        }
+
+        .skill-filter,
+        #skillFilterReset {
+          display: none !important;
+        }
+
         a[href]:after {
           content: "";
         }
@@ -42,9 +141,9 @@
     </style>
   </head>
 
-  <body class="bg-slate-50 text-slate-900">
-    <header class="sticky top-0 z-30 border-b border-slate-200 bg-white/80 backdrop-blur no-print">
-      <div class="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
+  <body class="text-slate-900">
+    <header id="siteHeader" class="sticky top-0 z-30 border-b border-slate-200 bg-white/70 backdrop-blur no-print dark:border-slate-800 dark:bg-slate-950/60">
+      <div class="mx-auto flex max-w-[68rem] items-center justify-between gap-3 px-4 py-3">
         <a href="#top" class="font-semibold tracking-tight">H.R. Nisal Asanga Waruna</a>
         <nav class="hidden items-center gap-5 text-sm text-slate-600 sm:flex">
           <a class="hover:text-slate-900" href="#experience">Experience</a>
@@ -53,14 +152,14 @@
           <a class="hover:text-slate-900" href="#education">Education</a>
           <a class="hover:text-slate-900" href="#achievements">Achievements</a>
           <a class="hover:text-slate-900" href="#certifications">Certifications</a>
-          <a class="hover:text-slate-900" href="#contact">Contact</a>
         </nav>
         <div class="flex items-center gap-2">
           <a
             class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50"
-            href="#contact"
-            >Hire me</a
-          >
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=nisalasanga@gmail.com"
+            target="_blank"
+            rel="noreferrer"
+            >Hire me</a>
           <button
             type="button"
             onclick="window.print()"
@@ -72,25 +171,31 @@
       </div>
     </header>
 
-    <main id="top" class="mx-auto max-w-5xl px-4 py-10">
-      <section class="grid gap-6 md:grid-cols-3 md:items-start">
-        <div class="md:col-span-2">
-          <p class="text-sm font-semibold text-slate-600">CV / Resume</p>
+    <main id="top" class="mx-auto max-w-[68rem] px-4 py-10">
+      <section class="reveal">
+        <div>
           <h1 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">H.R. Nisal Asanga Waruna</h1>
+          <div class="print-only mt-2 text-sm">
+            <span>Email: nisalasanga@gmail.com</span>
+            <span> | LinkedIn: linkedin.com/in/nisalasanga</span>
+            <span> | GitHub: github.com/nisalasanga</span>
+          </div>
           <p class="mt-3 text-base text-slate-700">
-            Data Scientist with 4+ years of experience in machine learning, deep learning, and large-scale data systems.
-            Skilled in designing and deploying predictive models, LLM-powered applications, and data pipelines that improve
-            decision-making and business performance.
+            Data Scientist with 4+ years of experience in machine learning, deep learning, and large-scale data
+            systems. Skilled in designing and deploying predictive models, LLM-powered applications, and
+            data pipelines that improve decision-making and business performance. Strong cross-functional
+            collaborator with proven success in retail, fintech, and AI product development. Passionate about
+            applying data-driven solutions to solve global business challenges.
           </p>
 
           <div class="mt-5 flex flex-wrap gap-2 text-sm">
             <span class="rounded-full bg-slate-900 px-3 py-1 text-white">Machine Learning</span>
-            <span class="rounded-full bg-slate-900 px-3 py-1 text-white">LLMs / RAG</span>
+            <span class="rounded-full bg-slate-900 px-3 py-1 text-white">LLMs / RAG / Agentic AI</span>
             <span class="rounded-full bg-slate-900 px-3 py-1 text-white">PySpark / Databricks</span>
             <span class="rounded-full bg-slate-900 px-3 py-1 text-white">AWS</span>
           </div>
 
-          <div class="mt-6 flex flex-wrap gap-3 text-sm">
+          <div class="no-print mt-6 flex flex-wrap gap-3 text-sm">
             <a
               class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 font-medium text-slate-700 shadow-sm hover:bg-slate-50"
               href="https://github.com/nisalasanga"
@@ -109,63 +214,25 @@
             </a>
             <a
               class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 font-medium text-slate-700 shadow-sm hover:bg-slate-50"
-              href="#contact"
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=nisalasanga@gmail.com"
+              target="_blank"
+              rel="noreferrer"
             >
-              Contact
+              Email
             </a>
           </div>
         </div>
 
-        <aside class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 class="text-sm font-semibold text-slate-600">At a glance</h2>
-          <dl class="mt-4 space-y-3 text-sm">
-            <div class="flex justify-between gap-3">
-              <dt class="text-slate-600">Location</dt>
-              <dd class="font-medium text-slate-900">Horana, Sri Lanka</dd>
-            </div>
-            <div class="flex justify-between gap-3">
-              <dt class="text-slate-600">Email</dt>
-              <dd class="font-medium text-slate-900">
-                <a
-                  class="underline decoration-slate-300 underline-offset-4 hover:decoration-slate-500"
-                  href="mailto:nisalasanga@gmail.com"
-                  >nisalasanga@gmail.com</a>
-              </dd>
-            </div>
-            <div class="flex justify-between gap-3">
-              <dt class="text-slate-600">Phone</dt>
-              <dd class="font-medium text-slate-900">
-                <a
-                  class="underline decoration-slate-300 underline-offset-4 hover:decoration-slate-500"
-                  href="tel:+94772133152"
-                  >+94 772 133 152</a>
-              </dd>
-            </div>
-            <div class="flex justify-between gap-3">
-              <dt class="text-slate-600">Website</dt>
-              <dd class="font-medium text-slate-900">
-                <a
-                  class="underline decoration-slate-300 underline-offset-4 hover:decoration-slate-500"
-                  href="https://github.com/nisalasanga"
-                  target="_blank"
-                  rel="noreferrer"
-                  >github.com/nisalasanga</a>
-              </dd>
-            </div>
-          </dl>
-
-          <div class="mt-5 rounded-xl bg-slate-50 p-4 text-xs text-slate-600">Updated from CV_NisalAsanga.pdf.</div>
-        </aside>
       </section>
 
-      <section id="experience" class="mt-12">
+      <section id="experience" class="mt-12 reveal">
         <div class="flex items-end justify-between gap-4">
           <h2 class="text-xl font-bold tracking-tight">Experience</h2>
           <p class="text-sm text-slate-600">Most recent first</p>
         </div>
 
         <div class="mt-4 space-y-4">
-          <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <article class="glass rounded-2xl p-5">
             <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <h3 class="font-semibold">Data Scientist</h3>
@@ -175,14 +242,15 @@
             </div>
             <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
               <li>
-                Developed, implemented, and deployed machine learning models for weekly demand forecasting of dry goods across a
-                major supermarket chain, improving forecast accuracy and enabling optimized inventory planning.
+                Developed, implemented, and deployed machine learning models for weekly demand
+                forecasting of dry goods across a major supermarket chain, improving forecast accuracy and
+                enabling optimized inventory planning.
               </li>
               <li>Associated technologies: Databricks, PySpark, Delta Lake, MLflow.</li>
             </ul>
           </article>
 
-          <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <article class="glass rounded-2xl p-5">
             <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <h3 class="font-semibold">Data Scientist</h3>
@@ -192,16 +260,18 @@
             </div>
             <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
               <li>
-                Designed and deployed AI-powered features including a RAG-based chat application, a speech-to-text module for meeting
-                minutes generation, and a text-to-speech system for an automatic radio bot.
+                Designed and deployed multiple AI-powered features, including a RAG-based chat application,
+                a speech-to-text module for meeting minutes generation, and a text-to-speech system for an
+                automatic radio bot.
               </li>
               <li>
-                Associated technologies: LangChain, Chroma, Flask, EC2, MySQL, AWS Lambda, Whisper, VITS, Redis, PyTorch.
+                Associated technologies: LangChain, Chroma, Flask, EC2, MySQL, AWS Lambda, Whisper, VITS, Redis, and PyTorch,
+                with integration of large language models (LLMs) across projects.
               </li>
             </ul>
           </article>
 
-          <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <article class="glass rounded-2xl p-5">
             <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <h3 class="font-semibold">Statistician</h3>
@@ -211,14 +281,14 @@
             </div>
             <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
               <li>
-                Developed predictive models to classify performing and non-performing loans and conducted statistical analysis across
-                various business units to analyze non-performing loans.
+                Developed predictive models to classify performing and non-performing loans and conducted
+                statistical analysis across various business units to analyze non-performing loans.
               </li>
               <li>Created interactive dashboards and visualizations for non-performing loan (NPL) metrics and reports using Tableau.</li>
             </ul>
           </article>
 
-          <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <article class="glass rounded-2xl p-5">
             <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <h3 class="font-semibold">Intern Planning</h3>
@@ -236,32 +306,7 @@
         </div>
       </section>
 
-      <section id="research" class="mt-12">
-        <div class="flex items-end justify-between gap-4">
-          <h2 class="text-xl font-bold tracking-tight">Research Experience</h2>
-          <p class="text-sm text-slate-600">Selected</p>
-        </div>
-
-        <div class="mt-4 space-y-4">
-          <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h3 class="font-semibold">
-              Protein Subcellular Localization Prediction in Eukaryotic Cells (University of Moratuwa)
-            </h3>
-            <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
-              <li>
-                Developed a deep learning model to predict the subcellular localization of proteins in eukaryotic cells to improve
-                prediction accuracy and provide insights into protein distribution across cellular compartments.
-              </li>
-              <li>
-                Associated technologies: Protein language modeling, protein embeddings, multi-label classification, homology
-                partitioning, sequence alignment algorithms.
-              </li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section id="skills" class="mt-12">
+      <section id="skills" class="mt-12 reveal">
         <div class="flex items-end justify-between gap-4">
           <h2 class="text-xl font-bold tracking-tight">Technical Skills</h2>
           <div class="no-print text-sm text-slate-600">
@@ -300,47 +345,60 @@
         </div>
 
         <div class="mt-4 grid gap-4 md:grid-cols-3">
-          <div class="skill-card rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" data-skill-category="languages">
+          <div class="skill-card glass rounded-2xl p-5" data-skill-category="languages">
             <h3 class="text-sm font-semibold text-slate-600">Programming Languages</h3>
             <p class="mt-2 text-sm text-slate-700">Python, R, SQL, Java, HiveQL, Cypher, VBA, JavaScript</p>
           </div>
-          <div class="skill-card rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" data-skill-category="databases">
+          <div class="skill-card glass rounded-2xl p-5" data-skill-category="databases">
             <h3 class="text-sm font-semibold text-slate-600">Databases</h3>
             <p class="mt-2 text-sm text-slate-700">MySQL, SQL Server, Amazon RDS/Aurora/DynamoDB, Neo4j, MongoDB, Redis, Chroma</p>
           </div>
-          <div class="skill-card rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" data-skill-category="bigdata">
+          <div class="skill-card glass rounded-2xl p-5" data-skill-category="bigdata">
             <h3 class="text-sm font-semibold text-slate-600">Big Data / Storage</h3>
             <p class="mt-2 text-sm text-slate-700">Hadoop, Spark (PySpark, pyspark.ml), Delta Lake, AWS Lake Formation</p>
           </div>
-          <div class="skill-card rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" data-skill-category="ml">
+          <div class="skill-card glass rounded-2xl p-5" data-skill-category="ml">
             <h3 class="text-sm font-semibold text-slate-600">Machine Learning / Deep Learning</h3>
             <p class="mt-2 text-sm text-slate-700">
               NumPy, Pandas, scikit-learn, XGBoost, PyTorch, TensorFlow, OpenCV, NLTK, spaCy, LangChain, LlamaIndex, LangGraph,
               Hugging Face
             </p>
           </div>
-          <div class="skill-card rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" data-skill-category="bi">
+          <div class="skill-card glass rounded-2xl p-5" data-skill-category="bi">
             <h3 class="text-sm font-semibold text-slate-600">BI Tools</h3>
             <p class="mt-2 text-sm text-slate-700">Tableau, Power BI</p>
           </div>
-          <div class="skill-card rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" data-skill-category="cloud">
+          <div class="skill-card glass rounded-2xl p-5" data-skill-category="cloud">
             <h3 class="text-sm font-semibold text-slate-600">Cloud</h3>
-            <p class="mt-2 text-sm text-slate-700">
-              AWS (EMR, S3, EC2, Lambda, API Gateway, SageMaker), GCP (Compute Engine, Cloud Storage, AI Platform, Cloud Functions,
-              Vertex AI, Cloud SQL)
-            </p>
+            <div class="mt-3 space-y-3">
+              <div>
+                <p class="text-sm font-semibold text-slate-600">AWS</p>
+                <p class="mt-1 text-sm text-slate-700">EMR, S3, EC2, Lambda, API Gateway, SageMaker</p>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-slate-600">GCP</p>
+                <p class="mt-1 text-sm text-slate-700">Compute Engine, Cloud Storage, AI Platform, Cloud Functions, Vertex AI, Cloud SQL</p>
+              </div>
+            </div>
           </div>
-          <div class="skill-card rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" data-skill-category="web">
+          <div class="skill-card glass rounded-2xl p-5" data-skill-category="web">
             <h3 class="text-sm font-semibold text-slate-600">Web Development</h3>
-            <p class="mt-2 text-sm text-slate-700">
-              Backend: Flask, Django, FastAPI. Frontend: HTML, CSS, Vue.js, Tailwind, Quasar.
-            </p>
+            <div class="mt-3 space-y-3">
+              <div>
+                <p class="text-sm font-semibold text-slate-600">Backend</p>
+                <p class="mt-1 text-sm text-slate-700">Flask, Django, FastAPI</p>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-slate-600">Frontend</p>
+                <p class="mt-1 text-sm text-slate-700">HTML, CSS, Vue.js, Tailwind, Quasar</p>
+              </div>
+            </div>
           </div>
-          <div class="skill-card rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" data-skill-category="ml">
+          <div class="skill-card glass rounded-2xl p-5" data-skill-category="ml">
             <h3 class="text-sm font-semibold text-slate-600">Deployment / Tracking</h3>
             <p class="mt-2 text-sm text-slate-700">MLflow, Databricks, AWS SageMaker, TensorFlow Serving</p>
           </div>
-          <div class="skill-card rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" data-skill-category="bigdata">
+          <div class="skill-card glass rounded-2xl p-5" data-skill-category="bigdata">
             <h3 class="text-sm font-semibold text-slate-600">Other Tools</h3>
             <p class="mt-2 text-sm text-slate-700">
               Git, GitHub, Docker, RStudio, Tableau Prep, Jupyter, Anaconda, PyCharm, VS Code, JIRA, Slack, ClickUp, Azure DevOps
@@ -349,11 +407,11 @@
         </div>
       </section>
 
-      <section id="education" class="mt-12">
+      <section id="education" class="mt-12 reveal">
         <h2 class="text-xl font-bold tracking-tight">Education</h2>
 
         <div class="mt-4 space-y-4">
-          <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <article class="glass rounded-2xl p-5">
             <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <h3 class="font-semibold">M.Sc. Data Science & Artificial Intelligence</h3>
@@ -361,10 +419,10 @@
               </div>
               <p class="text-sm font-medium text-slate-700">Jan 2023 — Jun 2025</p>
             </div>
-            <p class="mt-3 text-sm text-slate-700">Overall GPA: 3.9</p>
+            <p class="mt-3 text-sm text-slate-700">Overall GPA: 3.9 / 4.2</p>
           </article>
 
-          <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <article class="glass rounded-2xl p-5">
             <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <h3 class="font-semibold">B.Sc. (Honours) Statistics and Operations Research</h3>
@@ -372,15 +430,39 @@
               </div>
               <p class="text-sm font-medium text-slate-700">Jan 2017 — Jun 2021</p>
             </div>
-            <p class="mt-3 text-sm text-slate-700">Overall GPA: 3.6</p>
+            <p class="mt-3 text-sm text-slate-700">Overall GPA: 3.6 / 4.0</p>
           </article>
         </div>
       </section>
 
-      <section id="achievements" class="mt-12">
+      <section id="research" class="mt-12 reveal">
+        <div class="flex items-end justify-between gap-4">
+          <h2 class="text-xl font-bold tracking-tight">Research Experience</h2>
+        </div>
+
+        <div class="mt-4 space-y-4">
+          <article class="glass rounded-2xl p-5">
+            <h3 class="font-semibold">
+              Protein Subcellular Localization Prediction in Eukaryotic Cells (University of Moratuwa)
+            </h3>
+            <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
+              <li>
+                Developed a deep learning model to predict the subcellular localization of proteins in eukaryotic cells to improve
+                prediction accuracy and provide insights into protein distribution across cellular compartments.
+              </li>
+              <li>
+                Associated technologies: Protein language modeling, protein embeddings, multi-label classification, homology
+                partitioning, sequence alignment algorithms.
+              </li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="achievements" class="mt-12 reveal">
         <h2 class="text-xl font-bold tracking-tight">Key Achievements & Soft Skills</h2>
 
-        <div class="mt-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="glass mt-4 rounded-2xl p-5">
           <ul class="list-disc space-y-2 pl-5 text-sm text-slate-700">
             <li>
               Forecasting & Optimization: Enhanced weekly demand forecasting models, reducing forecast error by 15% and improving
@@ -406,10 +488,10 @@
         </div>
       </section>
 
-      <section id="certifications" class="mt-12">
+      <section id="certifications" class="mt-12 reveal">
         <h2 class="text-xl font-bold tracking-tight">Certifications</h2>
 
-        <div class="mt-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="glass mt-4 rounded-2xl p-5">
           <ul class="list-disc space-y-1 pl-5 text-sm text-slate-700">
             <li>Deep Learning Specialization - Coursera</li>
             <li>Machine Learning Explainability - Kaggle</li>
@@ -420,45 +502,41 @@
         </div>
       </section>
 
-      <section id="contact" class="mt-12">
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 class="text-xl font-bold tracking-tight">Contact</h2>
-          <p class="mt-2 text-sm text-slate-700">
-            The fastest way to reach me is via email.
-          </p>
-
-          <div class="mt-4 grid gap-3 sm:grid-cols-2">
-            <a
-              class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-800 shadow-sm hover:bg-slate-50"
-              href="mailto:nisalasanga@gmail.com"
-              >nisalasanga@gmail.com</a>
-            <a
-              class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-800 shadow-sm hover:bg-slate-50"
-              href="https://linkedin.com/in/nisalasanga"
-              target="_blank"
-              rel="noreferrer"
-              >linkedin.com/in/nisalasanga</a>
-            <a
-              class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-800 shadow-sm hover:bg-slate-50"
-              href="tel:+94772133152"
-              >+94 772 133 152</a>
-            <a
-              class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-800 shadow-sm hover:bg-slate-50"
-              href="https://github.com/nisalasanga"
-              target="_blank"
-              rel="noreferrer"
-              >github.com/nisalasanga</a>
-          </div>
-        </div>
-      </section>
-
       <footer class="mt-10 pb-6 text-center text-xs text-slate-500">
-        <p>© <span id="year"></span> H.R. Nisal Asanga Waruna. Built with HTML + Tailwind CSS.</p>
+        <p>© <span id="year"></span> H.R. Nisal Asanga Waruna.</p>
       </footer>
     </main>
 
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
+
+      const header = document.getElementById("siteHeader");
+      const setHeaderShadow = () => {
+        if (!header) return;
+        if (window.scrollY > 6) header.classList.add("shadow-lg");
+        else header.classList.remove("shadow-lg");
+      };
+      window.addEventListener("scroll", setHeaderShadow, { passive: true });
+      setHeaderShadow();
+
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!prefersReduced && "IntersectionObserver" in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add("is-visible");
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.12 }
+        );
+
+        document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+      } else {
+        document.querySelectorAll(".reveal").forEach((el) => el.classList.add("is-visible"));
+      }
 
       const activeFilters = new Set();
       const filterButtons = Array.from(document.querySelectorAll(".skill-filter"));
