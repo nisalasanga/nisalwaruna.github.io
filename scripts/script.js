@@ -29,6 +29,84 @@ if (!prefersReduced && "IntersectionObserver" in window) {
   document.querySelectorAll(".reveal").forEach((el) => el.classList.add("is-visible"));
 }
 
+// Hero Particle Animation
+class HeroParticles {
+  constructor() {
+    this.container = document.querySelector('.particles-container');
+    if (!this.container) return;
+    
+    this.particles = [];
+    this.particleCount = 25;
+    this.init();
+  }
+
+  init() {
+    this.createParticles();
+    this.animate();
+  }
+
+  createParticles() {
+    for (let i = 0; i < this.particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      
+      // Random starting position
+      const startX = Math.random() * 100;
+      const startY = Math.random() * 100 + 100; // Start below viewport
+      
+      particle.style.left = `${startX}%`;
+      particle.style.top = `${startY}%`;
+      
+      // Random animation delay and duration
+      const delay = Math.random() * 8;
+      const duration = 8 + Math.random() * 4;
+      
+      particle.style.animationDelay = `${delay}s`;
+      particle.style.animationDuration = `${duration}s`;
+      
+      // Random size variation
+      const size = 2 + Math.random() * 4;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      
+      this.container.appendChild(particle);
+      this.particles.push(particle);
+    }
+  }
+
+  animate() {
+    // Particles are animated via CSS, but we can add interactive effects here
+    this.container.addEventListener('mousemove', (e) => {
+      const rect = this.container.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      
+      // Add subtle parallax effect
+      this.particles.forEach((particle, index) => {
+        const speed = (index % 3 + 1) * 0.5;
+        const xOffset = (x - 50) * speed * 0.1;
+        const yOffset = (y - 50) * speed * 0.1;
+        
+        particle.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+      });
+    });
+
+    // Reset on mouse leave
+    this.container.addEventListener('mouseleave', () => {
+      this.particles.forEach(particle => {
+        particle.style.transform = '';
+      });
+    });
+  }
+}
+
+// Initialize particles when DOM is ready
+if (!prefersReduced) {
+  document.addEventListener('DOMContentLoaded', () => {
+    new HeroParticles();
+  });
+}
+
 const activeFilters = new Set();
 const filterButtons = Array.from(document.querySelectorAll(".skill-filter"));
 const cards = Array.from(document.querySelectorAll(".skill-card"));
