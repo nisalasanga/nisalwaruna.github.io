@@ -1,3 +1,202 @@
+// Neural Network Animation System
+class NeuralNetworkAnimation {
+  constructor() {
+    this.container = document.getElementById('neuralNetwork');
+    this.nodes = [];
+    this.connections = [];
+    this.dataParticles = [];
+    
+    this.nodeCount = 20;
+    this.connectionCount = 25;
+    this.dataParticleCount = 12;
+    
+    this.init();
+  }
+
+  init() {
+    if (!this.container) return;
+    
+    this.createNeuralNetwork();
+    this.startAnimations();
+    this.setupInteraction();
+  }
+
+  createNeuralNetwork() {
+    // Create neural nodes
+    for (let i = 0; i < this.nodeCount; i++) {
+      const node = document.createElement('div');
+      node.className = 'neural-node';
+      
+      const x = Math.random() * window.innerWidth;
+      const y = Math.random() * window.innerHeight;
+      
+      node.style.left = `${x}px`;
+      node.style.top = `${y}px`;
+      node.dataset.x = x;
+      node.dataset.y = y;
+      
+      // Random animation delay
+      node.style.animationDelay = `${Math.random() * 3}s`;
+      
+      this.container.appendChild(node);
+      this.nodes.push(node);
+    }
+
+    // Create neural connections
+    for (let i = 0; i < this.connectionCount; i++) {
+      const node1 = this.nodes[Math.floor(Math.random() * this.nodes.length)];
+      const node2 = this.nodes[Math.floor(Math.random() * this.nodes.length)];
+      
+      if (node1 !== node2) {
+        this.createConnection(node1, node2);
+      }
+    }
+
+    // Create data flow particles
+    for (let i = 0; i < this.dataParticleCount; i++) {
+      this.createDataParticle();
+    }
+  }
+
+  createConnection(node1, node2) {
+    const connection = document.createElement('div');
+    connection.className = 'neural-connection';
+    
+    const x1 = parseFloat(node1.dataset.x);
+    const y1 = parseFloat(node1.dataset.y);
+    const x2 = parseFloat(node2.dataset.x);
+    const y2 = parseFloat(node2.dataset.y);
+    
+    const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+    
+    connection.style.width = `${distance}px`;
+    connection.style.left = `${x1}px`;
+    connection.style.top = `${y1}px`;
+    connection.style.transform = `rotate(${angle}deg)`;
+    
+    connection.style.animationDelay = `${Math.random() * 2}s`;
+    
+    this.container.appendChild(connection);
+    this.connections.push(connection);
+  }
+
+  createDataParticle() {
+    const particle = document.createElement('div');
+    particle.className = 'data-particle';
+    
+    const startNode = this.nodes[Math.floor(Math.random() * this.nodes.length)];
+    const endNode = this.nodes[Math.floor(Math.random() * this.nodes.length)];
+    
+    particle.dataset.startX = startNode.dataset.x;
+    particle.dataset.startY = startNode.dataset.y;
+    particle.dataset.endX = endNode.dataset.x;
+    particle.dataset.endY = endNode.dataset.y;
+    particle.dataset.progress = '0';
+    
+    particle.style.left = `${startNode.dataset.x}px`;
+    particle.style.top = `${startNode.dataset.y}px`;
+    
+    this.container.appendChild(particle);
+    this.dataParticles.push(particle);
+  }
+
+  startAnimations() {
+    // Animate data particles along connections
+    setInterval(() => {
+      this.dataParticles.forEach(particle => {
+        let progress = parseFloat(particle.dataset.progress);
+        progress += 0.015;
+        
+        if (progress >= 1) {
+          // Reset particle with new random connection
+          const startNode = this.nodes[Math.floor(Math.random() * this.nodes.length)];
+          const endNode = this.nodes[Math.floor(Math.random() * this.nodes.length)];
+          
+          particle.dataset.startX = startNode.dataset.x;
+          particle.dataset.startY = startNode.dataset.y;
+          particle.dataset.endX = endNode.dataset.x;
+          particle.dataset.endY = endNode.dataset.y;
+          particle.dataset.progress = '0';
+          progress = 0;
+        } else {
+          particle.dataset.progress = progress;
+        }
+        
+        const startX = parseFloat(particle.dataset.startX);
+        const startY = parseFloat(particle.dataset.startY);
+        const endX = parseFloat(particle.dataset.endX);
+        const endY = parseFloat(particle.dataset.endY);
+        
+        const currentX = startX + (endX - startX) * progress;
+        const currentY = startY + (endY - startY) * progress;
+        
+        particle.style.left = `${currentX}px`;
+        particle.style.top = `${currentY}px`;
+      });
+    }, 30);
+
+    // Randomly activate nodes
+    setInterval(() => {
+      const randomNode = this.nodes[Math.floor(Math.random() * this.nodes.length)];
+      randomNode.classList.add('active');
+      
+      setTimeout(() => {
+        randomNode.classList.remove('active');
+      }, 1000);
+    }, 1500);
+  }
+
+  setupInteraction() {
+    // Mouse interaction with neural network
+    document.addEventListener('mousemove', (e) => {
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      
+      this.nodes.forEach(node => {
+        const nodeX = parseFloat(node.dataset.x);
+        const nodeY = parseFloat(node.dataset.y);
+        
+        const distance = Math.sqrt(
+          Math.pow(mouseX - nodeX, 2) + Math.pow(mouseY - nodeY, 2)
+        );
+        
+        if (distance < 150) {
+          const intensity = 1 - (distance / 150);
+          node.style.transform = `scale(${1 + intensity * 0.8})`;
+          node.style.opacity = 0.6 + intensity * 0.4;
+        } else {
+          node.style.transform = '';
+          node.style.opacity = '';
+        }
+      });
+    });
+
+    // Resize handling
+    window.addEventListener('resize', () => {
+      this.recreateNetwork();
+    });
+  }
+
+  recreateNetwork() {
+    // Clear existing network
+    this.container.innerHTML = '';
+    this.nodes = [];
+    this.connections = [];
+    this.dataParticles = [];
+    
+    // Recreate with new dimensions
+    this.createNeuralNetwork();
+  }
+}
+
+// Initialize neural network animation
+document.addEventListener('DOMContentLoaded', () => {
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    new NeuralNetworkAnimation();
+  }
+});
+
 // Small DOM utilities and page behavior extracted from index.html
 document.getElementById("year").textContent = new Date().getFullYear();
 

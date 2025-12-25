@@ -31,6 +31,103 @@ body {
     radial-gradient(800px 600px at 40% 95%, rgba(34, 197, 94, 0.14), transparent 55%),
     linear-gradient(180deg, rgb(var(--bg1)), rgb(var(--bg2)));
   color: rgb(var(--text));
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Neural Network Background */
+.neural-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: 
+    radial-gradient(ellipse at 20% 30%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(6, 182, 212, 0.02) 0%, transparent 60%);
+}
+
+/* Neural Network Nodes */
+.neural-node {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: rgba(59, 130, 246, 0.3);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.2);
+  animation: node-pulse 3s ease-in-out infinite;
+}
+
+.neural-node.active {
+  background: rgba(139, 92, 246, 0.5);
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+  animation: node-activate 1s ease-out;
+}
+
+/* Neural Connections */
+.neural-connection {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(59, 130, 246, 0.2) 20%, 
+    rgba(139, 92, 246, 0.2) 80%, 
+    transparent 100%);
+  transform-origin: left center;
+  animation: connection-flow 2s ease-in-out infinite;
+}
+
+/* Data Flow Particles */
+.data-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(6, 182, 212, 0.6);
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(6, 182, 212, 0.4);
+}
+
+@keyframes node-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+}
+
+@keyframes node-activate {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes connection-flow {
+  0% {
+    opacity: 0.1;
+    background-position: -100% 0;
+  }
+  50% {
+    opacity: 0.4;
+    background-position: 100% 0;
+  }
+  100% {
+    opacity: 0.1;
+    background-position: 200% 0;
+  }
 }
 
 .glass {
@@ -213,7 +310,11 @@ body {
 @media print {
   .hero-animation,
   .gradient-overlay,
-  .particles-container {
+  .particles-container,
+  .neural-bg,
+  .neural-node,
+  .neural-connection,
+  .data-particle {
     display: none !important;
   }
   
