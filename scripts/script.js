@@ -33,7 +33,10 @@ if (!prefersReduced && "IntersectionObserver" in window) {
 class HeroParticles {
   constructor() {
     this.container = document.querySelector('.particles-container');
-    if (!this.container) return;
+    if (!this.container) {
+      console.log('Particles container not found');
+      return;
+    }
     
     this.particles = [];
     this.particleCount = 25;
@@ -41,8 +44,11 @@ class HeroParticles {
   }
 
   init() {
-    this.createParticles();
-    this.animate();
+    // Wait a bit for DOM to be ready
+    setTimeout(() => {
+      this.createParticles();
+      this.animate();
+    }, 100);
   }
 
   createParticles() {
@@ -72,6 +78,7 @@ class HeroParticles {
       this.container.appendChild(particle);
       this.particles.push(particle);
     }
+    console.log(`Created ${this.particles.length} particles`);
   }
 
   animate() {
@@ -102,9 +109,35 @@ class HeroParticles {
 
 // Initialize particles when DOM is ready
 if (!prefersReduced) {
-  document.addEventListener('DOMContentLoaded', () => {
-    new HeroParticles();
+  // Try multiple initialization methods
+  const initParticles = () => {
+    console.log('Attempting to initialize particles');
+    const container = document.querySelector('.particles-container');
+    if (container) {
+      console.log('Container found, creating particles');
+      new HeroParticles();
+    } else {
+      console.log('Container not found, retrying...');
+      setTimeout(initParticles, 500);
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initParticles);
+  } else {
+    initParticles();
+  }
+  
+  // Also try as a fallback
+  window.addEventListener('load', () => {
+    const container = document.querySelector('.particles-container');
+    if (container && container.children.length === 0) {
+      console.log('Fallback: Loading particles after window load');
+      new HeroParticles();
+    }
   });
+} else {
+  console.log('Reduced motion preferred, skipping particles');
 }
 
 const activeFilters = new Set();

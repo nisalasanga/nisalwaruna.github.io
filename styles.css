@@ -74,6 +74,8 @@ body {
   border-radius: 50%;
   opacity: 0;
   animation: float-particle 8s infinite ease-in-out;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .gradient-overlay {
